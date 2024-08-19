@@ -1,0 +1,45 @@
+{
+  "name": "qa-automation",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Miguel <miguel@formant.io>",
+  "homepage": "https://github.com/FormantIO/whiz-connect#readme",
+  "license": "ISC",
+  "main": "lib/qa-automation.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FormantIO/fleet-manager.git"
+  },
+  "scripts": {
+    "test": "npx playwright test --headed",
+    "test:ci": "npx playwright test",
+    "sanity": "env=stage npx playwright test -g @Sanity --workers=6",
+    "rm-allure": "rm -rf allure-report allure-results",
+    "go-allure": "yarn generate-allure && yarn open-allure",
+    "generate-allure": "allure generate ./allure-results --clean --single-file",
+    "open-allure": "allure open ./allure-report",
+    "help": "npx playwright test tests/accountPicker/ --reporter=line,allure-playwright",
+    "start": "ts-node -r tsconfig-paths/register ./utils/download_pdf_bugbub_report.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^22.1.0",
+    "tsconfig-paths": "^3.12.0"
+  },
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "node-poppler": "^7.2.0",
+    "playright": "^0.0.22",
+    "playwright": "^1.46.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
