@@ -1,0 +1,73 @@
+name: Run BugBug Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      suiteOption:
+        description: 'Select the suite to run'
+        required: true
+        type: choice
+        options:
+          - Accounts
+          - Locations
+          - Robots
+          - Users
+          - All
+
+jobs:
+  run-bugbug-tests:
+    runs-on: ubuntu-latest
+    name: Run BugBug Tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set Suite ID
+        id: set-suite-id
+        run: |
+         if [ "${{ github.event.inputs.suiteOption }}" == "Accounts" ]; then
+            echo "suiteId=${{ secrets.FLEET_MANAGER_ACCOUNT_SUITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.suiteOption }}" == "Locations" ]; then
+            echo "suiteId=${{ secrets.FLEET_MANAGER_LOCATIONS_SUITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.suiteOption }}" == "Robots" ]; then
+            echo "suiteId=${{ secrets.FLEET_MANAGER_ROBOTS_SUITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.suiteOption }}" == "Users" ]; then
+            echo "suiteId=${{ secrets.FLEET_MANAGER_USERS_SUITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.suiteOption }}" == "All" ]; then
+            echo "suiteId=${{ secrets.FLEET_MANAGER_ALL_SUITE_ID }}" >> $GITHUB_ENV
+          fi
+      - name: Run BugBug Cloud Runner
+        id: run-bugbug-tests
+        uses: bugbug-io/bugbug-github-action@v1.2.1
+        with:
+          apiToken: ${{ secrets.APITOKEN }}
+          suiteId: ${{ env.suiteId }}
+          profileName: "Fleet Manager PPD"
+          debug: "false"
+        continue-on-error: true        
+
+      - name: Getting Run Output
+        run: |
+          echo "Suite Run ID: ${{ steps.run-bugbug-tests.outputs.suiteRunId }}"
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./qa-automation
+        
+      - name: Install Playwright Browsers
+        run: npx playwright install
+        working-directory: ./qa-automation  
+        
+      - name: Run PDF Download Script
+        id: download-pdf
+        env:
+          SUITE_RUN_ID: ${{ steps.run-bugbug-tests.outputs.suiteRunId }}
+          BUGBUGUSERNAME: ${{ secrets.BUGBUGUSERNAME }}
+          BUGBUGPASSWORD: ${{ secrets.BUGBUGPASSWORD }}
+        run: npx ts-node ./qa-automation/utils/download_pdf_bugbub_report.ts
+         
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: ${{ steps.download-pdf.outputs.pdf_filename }}
+         path: ./downloaded-pdf/
