@@ -31,11 +31,11 @@ dotenv.config();
       .getByPlaceholder("Password")
       .fill(process.env.BUGBUGPASSWORD as string);
     await page.getByTestId("LoginForm").getByTestId("Button").click();
-    await page.waitForNavigation();
+    await page.waitForTimeout(2000);
     await page.goto(
       `https://app.bugbug.io/organizations/bc8f1cc9-851e-49c5-8d27-96cdbf9af513/projects/whiz-connect-cd9e3f1f-32c3-44b4-a71f-2ef4e78b16c2/runs-history/suites/${suiteID}/`
     );
-    await page.waitForNavigation();
+    await page.waitForTimeout(2000);
     await page.getByLabel("Download PDF report").click();
     await page.getByTestId("TextArea").click();
     await page.getByTestId("TextArea").fill(note);
