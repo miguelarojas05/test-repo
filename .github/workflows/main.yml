@@ -67,7 +67,7 @@ jobs:
         run: npx ts-node ./qa-automation/utils/download_pdf_bugbub_report.ts
          
       - name: Upload PDF Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: ${{ steps.download-pdf.outputs.pdf_filename }}
          path: ./downloaded-pdf/
