@@ -36,5 +36,5 @@
       "@adapters/*": ["adapters/*"]
     }
   },
-  "include": ["src", "src/**/*.tsx"]
+ 
 }
