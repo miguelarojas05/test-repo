@@ -1,0 +1,11 @@
+export const productName = "Nexus 6";
+export const user = "pepesanchez@hotmail.com";
+export const password = "Bysanches07";
+export const name = "Pepe";
+export const country = "India";
+export const city = "Mumbai";
+export const creditCard = "8888-8888-5585-2154";
+export const month = "05";
+export const year = "2025";
+export const message = "message for example or somthing like that";
+export const productFilter ="ASUS Full HD"

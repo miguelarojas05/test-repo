@@ -1,0 +1,21 @@
+{
+  "name": "@formant/qa-automation",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "main": "index.ts",
+  "scripts": {
+    "smoke:test:dev": "npm install && npx playwright test -g @Smoke --workers=1 --headed"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.43.1",
+    "dotenv": "^16.4.7",
+    "env-var": "^7.5.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.1"
+  },
+  "engines": {
+    "node": "^16.13.0 || ^18.12.0"
+  }
+}
